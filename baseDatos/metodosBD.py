@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 class BaseDatos:
 
@@ -6,7 +7,9 @@ class BaseDatos:
     def conectar():
 
         try:
-            con = sqlite3.connect("/home/webster/PycharmProjects/ProxectoDI/formularios/database.db")
+            path = os.path.dirname(os.path.abspath(__file__))
+            bd = os.path.join(path, 'database.db')
+            con = sqlite3.connect(bd)
 
         except sqlite3.DatabaseError as erro_conexion:
             print(erro_conexion)
