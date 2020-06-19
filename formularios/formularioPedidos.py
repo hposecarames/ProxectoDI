@@ -115,10 +115,14 @@ class FormularioPedido(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Pedido insertado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_dni.set_text("")
+            self.entrada_codigo.set_text("")
+            self.entrada_cantidade.set_text("")
         else:
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Faltan datos ou algún é erróneo")
             mensaxe.run()
             mensaxe.destroy()
+
 
     def on_modificar_clicked(self, button):
         """
@@ -137,6 +141,10 @@ class FormularioPedido(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Pedido modificado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_dni_m.set_text("")
+            self.entrada_codigo_m.set_text("")
+            self.entrada_cantidade_m.set_text("")
+
         else:
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
                                         "Faltan datos ou algún é erróneo")
@@ -157,6 +165,7 @@ class FormularioPedido(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Pedido eliminado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_id_e.set_text("")
         else:
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
                                         "Faltan datos ou algún é erróneo")

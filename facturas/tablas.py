@@ -85,7 +85,7 @@ class Facturas(Gtk.Window):
         :return: Nada
         """
 
-        if self.combo.get_active_text()=="Ficha Cliente":
+        if self.combo.get_active_text()=="Ficha Cliente" and self.modelo[self.fila][0] is not None:
             filename = self.modelo[self.fila][0] + ".pdf"
             w, h = A4
             pdf = canvas.Canvas(filename, pagesize=A4)
@@ -104,8 +104,11 @@ class Facturas(Gtk.Window):
             pdf.drawText(texto)
             pdf.showPage()
             pdf.save()
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "PDF Ficha Cliente creado")
+            mensaxe.run()
+            mensaxe.destroy()
 
-        if self.combo.get_active_text()=="Pedidos Cliente":
+        if self.combo.get_active_text()=="Pedidos Cliente" and self.modelo[self.fila][0] is not None:
             dni = str(self.modelo[self.fila][0])
 
 
@@ -135,6 +138,9 @@ class Facturas(Gtk.Window):
             pdf.drawText(texto)
             pdf.showPage()
             pdf.save()
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "PDF Pedidos Cliente creado")
+            mensaxe.run()
+            mensaxe.destroy()
 
 
 

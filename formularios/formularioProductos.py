@@ -104,6 +104,9 @@ class FormularioProducto(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Producto insertado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_codigo.set_text("")
+            self.entrada_nome.set_text("")
+            self.entrada_prezo.set_text("")
         else:
 
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
@@ -124,6 +127,9 @@ class FormularioProducto(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Producto modificado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_codigo_m.set_text("")
+            self.entrada_nome_m.set_text("")
+            self.entrada_prezo_m.set_text("")
         else:
 
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
@@ -140,6 +146,7 @@ class FormularioProducto(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Producto eliminado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_codigo_e.set_text("")
         else:
 
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,

@@ -30,6 +30,7 @@ class Login(Gtk.Window):
 
         self.entrada_usuario = Gtk.Entry()
         self.entrada_contrasinal = Gtk.Entry()
+        self.entrada_contrasinal.set_visibility(False)
 
         self.btn_aceptar = Gtk.Button("ACEPTAR")
         self.btn_aceptar.connect('clicked', self.on_aceptar_clicked)

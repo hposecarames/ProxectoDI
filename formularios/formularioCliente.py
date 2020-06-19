@@ -173,6 +173,13 @@ class FormularioCliente(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Cliente insertado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_dni.set_text("")
+            self.entrada_nome.set_text("")
+            self.entrada_apelidos.set_text("")
+            self.entrada_direccion.set_text("")
+            self.entrada_telefono.set_text("")
+            self.entrada_cp.set_text("")
+
         else:
 
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
@@ -205,6 +212,12 @@ class FormularioCliente(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Cliente modificado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_dni_m.set_text("")
+            self.entrada_nome_m.set_text("")
+            self.entrada_apelidos_m.set_text("")
+            self.entrada_direccion_m.set_text("")
+            self.entrada_telefono_m.set_text("")
+            self.entrada_cp_m.set_text("")
         else:
 
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
@@ -226,6 +239,7 @@ class FormularioCliente(Gtk.Window):
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Cliente eliminado")
             mensaxe.run()
             mensaxe.destroy()
+            self.entrada_dni_e.set_text("")
         else:
 
             mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
