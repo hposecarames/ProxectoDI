@@ -6,12 +6,15 @@ from menu import menus
 
 con = BaseDatos.conectar()
 BaseDatos.crear_taboas()
-BaseDatos.insertar_usuario(con, 'admin', '1234')
+
 
 
 class Login(Gtk.Window):
 
     def __init__(self):
+        """
+        Método constructor, aquí definimos tódolos elementos que constituen a ventá de Login
+        """
 
         Gtk.Window.__init__(self, title="Login")
         self.set_default_size(300, 200)
@@ -40,6 +43,12 @@ class Login(Gtk.Window):
         self.connect('destroy', Gtk.main_quit)
         self.show_all()
     def on_aceptar_clicked(self, button):
+        """
+        Método que recolle os datos das entradas usuario e contrasinal e fai a chamada a base de datos para consultar
+         que coincidan, se os datos coinciden inicia a clase Menu
+        :param button: boton aceptar
+        :return: Nada
+        """
         con = BaseDatos.conectar()
         usuario = self.entrada_usuario.get_text()
         contrasinal = self.entrada_contrasinal.get_text()

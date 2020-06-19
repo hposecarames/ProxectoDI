@@ -8,6 +8,9 @@ from menu import menus
 class FormularioCliente(Gtk.Window):
 
     def __init__(self):
+        """
+        Método constructor, aquí definimos tódolos elementos que constituen a ventá de FormularioCliente
+        """
 
         Gtk.Window.__init__(self, title="FormularioCliente")
         self.set_default_size(300, 380)
@@ -136,13 +139,24 @@ class FormularioCliente(Gtk.Window):
         self.show_all()
 
     def on_button_toggled(self, button, label):
+        """
+        Método que recolle a señal do RadioButton
+        :param button: boton
+        :param label: Etiqueta que recolle a opcion do RadioButton
+        :return:
+        """
         if button.get_active():
             state = "on"
         else:
             state = "off"
 
     def on_insertar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
+        """
+        Método que recolle os datos das entradas e inserta un cliente na base de datos
+        :param button: boton
+        :return: Nada
+        """
+
         dni = self.entrada_dni.get_text()
         nome = self.entrada_nome.get_text()
         apelidos = self.entrada_apelidos.get_text()
@@ -154,14 +168,27 @@ class FormularioCliente(Gtk.Window):
         else:
             sexo = self.btn_sexo2.get_label()
 
-        metodosBD.BaseDatos.insertar_cliente(con, dni, nome, apelidos, direccion, telefono, cp, sexo)
+        if metodosBD.BaseDatos.insertar_cliente(self, dni, nome, apelidos, direccion, telefono, cp, sexo) == True:
 
-        mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Cliente insertado")
-        mensaxe.run()
-        mensaxe.destroy()
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Cliente insertado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
+
+
 
     def on_modificar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
+        """
+        Método que recolle as entradas de datos e modifica un cliente na base de datos
+        :param button: boton
+        :return: Nada
+        """
+
         dni = self.entrada_dni_m.get_text()
         nome = self.entrada_nome_m.get_text()
         apelidos = self.entrada_apelidos_m.get_text()
@@ -173,14 +200,44 @@ class FormularioCliente(Gtk.Window):
         else:
             sexo = self.btn_sexo2_m.get_label()
 
-        metodosBD.BaseDatos.modificar_cliente(con, nome, apelidos, direccion, telefono, cp, sexo, dni)
+        if metodosBD.BaseDatos.modificar_cliente(self, nome, apelidos, direccion, telefono, cp, sexo, dni) == True:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Cliente modificado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
 
     def on_eliminar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
+        """
+        Método que recolle un dni e elimina un cliente na base de datos
+        :param button: boton
+        :return: Nada
+        """
+
         dni = self.entrada_dni_e.get_text()
 
-        metodosBD.BaseDatos.eliminar_cliente(con, dni)
+        if metodosBD.BaseDatos.eliminar_cliente(self, dni) == True:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Cliente eliminado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
 
     def on_volver_clicked(self, button):
+        """
+        Método para cerrar a ventá actual e volver a pantalla Menu
+        :param button: boton
+        :return: Nada
+        """
         menus.Menu()
         self.set_visible(False)

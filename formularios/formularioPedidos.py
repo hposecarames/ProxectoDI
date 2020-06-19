@@ -8,8 +8,11 @@ from menu import menus
 class FormularioPedido(Gtk.Window):
 
     def __init__(self):
+        """
+        Método constructor, aquí definimos tódolos elementos que constituen a ventá de FormularioPedido
+        """
 
-        Gtk.Window.__init__(self, title="FormularioCliente")
+        Gtk.Window.__init__(self, title="FormularioPedido")
         self.set_default_size(300, 380)
         self.set_border_width(10)
 
@@ -96,33 +99,75 @@ class FormularioPedido(Gtk.Window):
 
 
     def on_insertar_clicked(self, button):
+        """
+        Método que recolle os datos das entradas para insertar na tabla pedidos
+        :param button: boton
+        :return: Nada
+        """
 
-        con = metodosBD.BaseDatos.conectar()
+
         dni = self.entrada_dni.get_text()
         codigo = self.entrada_codigo.get_text()
         cantidade = self.entrada_cantidade.get_text()
 
-        metodosBD.BaseDatos.insertar_pedido(con, dni, codigo, cantidade)
+        if metodosBD.BaseDatos.insertar_pedido(self, dni, codigo, cantidade) == True:
 
-        mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Pedido insertado")
-        mensaxe.run()
-        mensaxe.destroy()
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Pedido insertado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
 
     def on_modificar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
+        """
+        Método que recolle os datos das entradas para modificar un pedido
+        :param button:
+        :return:
+        """
+
         dni = self.entrada_dni_m.get_text()
         codigo = self.entrada_nome_m.get_text()
         cantidade = self.entrada_cantidade_m.get_text()
 
 
-        metodosBD.BaseDatos.modificar_pedido(con, id, dni, codigo, cantidade)
+        if metodosBD.BaseDatos.modificar_pedido(self, id, dni, codigo, cantidade) == True:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Pedido modificado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
+
 
     def on_eliminar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
-        dni = self.entrada_dni_e.get_text()
+        """
+        Método que recolle o ID dun pedido para eliminalo
+        :param button: boton
+        :return: Nada
+        """
 
-        metodosBD.BaseDatos.eliminar_p(con, dni)
+        id = self.entrada_id_e.get_text()
+
+        if metodosBD.BaseDatos.eliminar_pedido(self, id) == True:
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Pedido eliminado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
 
     def on_volver_clicked(self, button):
+        """
+        Método para cerrar a ventá actual e volver a pantalla Menu
+        :param button: boton
+        :return: Nada
+        """
         menus.Menu()
         self.set_visible(False)

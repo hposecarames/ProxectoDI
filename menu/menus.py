@@ -4,10 +4,14 @@ from gi.repository import Gtk
 from formularios import formularioCliente
 from formularios import formularioProductos
 from formularios import formularioPedidos
+from facturas import tablas
 
 class Menu(Gtk.Window):
 
     def __init__(self):
+        """
+        Método constructor, aquí definimos tódolos elementos que constituen a ventá de Menu
+        """
         Gtk.Window.__init__(self, title='Menu')
 
         self.set_default_size(300, 200)
@@ -35,6 +39,8 @@ class Menu(Gtk.Window):
         self.btn_clientes.connect('clicked', self.on_cliente_clicked)
         self.btn_productos.connect('clicked', self.on_producto_clicked)
         self.btn_pedidos.connect('clicked', self.on_pedido_clicked)
+        self.btn_consultas.connect('clicked', self.on_consultas_clicked)
+        self.btn_sair.connect('clicked', self.on_sair_clicked)
 
         self.grid_menu.add(self.btn_clientes)
         self.grid_menu.attach_next_to(self.btn_productos, self.btn_clientes, Gtk.PositionType.BOTTOM, 1, 1)
@@ -46,15 +52,47 @@ class Menu(Gtk.Window):
         self.show_all()
 
     def on_cliente_clicked(self, button):
+        """
+        Método para acceder a ventá FormularioCliente
+        :param button: boton
+        :return: Nada
+        """
         formularioCliente.FormularioCliente()
         self.set_visible(False)
 
     def on_producto_clicked(self, button):
+        """
+        Método para acceder a ventá FormularioProducto
+        :param button: boton
+        :return: Nada
+        """
         formularioProductos.FormularioProducto()
         self.set_visible(False)
 
     def on_pedido_clicked(self, button):
+        """
+        Método para acceder a ventá FormularioPedido
+        :param button: boton
+        :return: Nada
+        """
         formularioPedidos.FormularioPedido()
         self.set_visible(False)
+
+    def on_consultas_clicked(self, button):
+        """
+        Método para acceder a ventá Facturas
+        :param button: boton
+        :return: Nada
+        """
+        tablas.Facturas()
+        self.set_visible(False)
+
+    def on_sair_clicked(self, button):
+        """
+        Método para sair da aplicación
+        :param button: boton
+        :return: Nada
+        """
+        exit(0)
 
 

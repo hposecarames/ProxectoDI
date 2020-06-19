@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formularios.formularioCliente &#8212; documentación de Proxecto DI - 1.0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fuente para formularios.formularioCliente</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">gi</span>
+<span class="n">gi</span><span class="o">.</span><span class="n">require_version</span><span class="p">(</span><span class="s1">&#39;Gtk&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Gtk</span>
+<span class="kn">from</span> <span class="nn">baseDatos</span> <span class="kn">import</span> <span class="n">metodosBD</span>
+<span class="kn">from</span> <span class="nn">menu</span> <span class="kn">import</span> <span class="n">menus</span>
+
+
+<div class="viewcode-block" id="FormularioCliente"><a class="viewcode-back" href="../../FormularioCliente.html#formularios.formularioCliente.FormularioCliente">[documentos]</a><span class="k">class</span> <span class="nc">FormularioCliente</span><span class="p">(</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método constructor, aquí definimos tódolos elementos que constituen a ventá de FormularioCliente</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Gtk</span><span class="o">.</span><span class="n">Window</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;FormularioCliente&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_size</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">380</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_border_width</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">paginas</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Notebook</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paginas</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Grid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">set_border_width</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">set_column_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">set_row_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">paginas</span><span class="o">.</span><span class="n">append_page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Insertar&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_dni</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Dni: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_nome</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Nome: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Apelidos: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_direccion</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Direccion: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_telefono</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Telefono: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_cp</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Codigo Postal: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_sexo</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Sexo: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_nome</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_apelidos</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_direccion</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_telefono</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">RadioButton</span><span class="o">.</span><span class="n">new_with_label_from_widget</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Home&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;toggled&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_button_toggled</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">RadioButton</span><span class="o">.</span><span class="n">new_from_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Muller&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;toggled&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_button_toggled</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Box</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_insertar</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;INSERTAR&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_volver</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;VOLVER&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_insertar</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_insertar_clicked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_volver</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_volver_clicked</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_dni</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_dni</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_nome</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_dni</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_nome</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_nome</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_nome</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_apelidos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_direccion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_direccion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_direccion</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_telefono</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_direccion</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_telefono</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_telefono</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_cp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_telefono</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_cp</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_sexo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_cp</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_insertar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_insertar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_volver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_insertar</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Grid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">set_border_width</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">set_row_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">set_column_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">paginas</span><span class="o">.</span><span class="n">append_page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Modificar&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_dni_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Dni: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_nome_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Nome: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Apelidos: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_direccion_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Direccion: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_telefono_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Telefono: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_cp_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Codigo Postal: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_sexo_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Sexo: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_nome_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_apelidos_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_direccion_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_telefono_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">RadioButton</span><span class="o">.</span><span class="n">new_with_label_from_widget</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Home&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo_m</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;toggled&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_button_toggled</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">RadioButton</span><span class="o">.</span><span class="n">new_from_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo_m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2_m</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Muller&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2_m</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;toggled&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_button_toggled</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo_m</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Box</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo_m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo_m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo_m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2_m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_modificar</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;MODIFICAR&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_modificar</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_modificar_clicked</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_dni_m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_dni_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_nome_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_dni_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_nome_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_nome_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_nome_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_apelidos_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_direccion_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_apelidos_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_direccion_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_direccion_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_telefono_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_direccion_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_telefono_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_telefono_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_cp_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_telefono_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_cp_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_sexo_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_cp_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_modificar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_modificar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">caixa_sexo_m</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Grid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span><span class="o">.</span><span class="n">set_border_width</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span><span class="o">.</span><span class="n">set_row_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span><span class="o">.</span><span class="n">set_column_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">paginas</span><span class="o">.</span><span class="n">append_page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Eliminar&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">et_dni_e</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Dni: &quot;</span><span class="p">,</span> <span class="n">halign</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Align</span><span class="o">.</span><span class="n">START</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni_e</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Entry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_eliminar</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;ELIMINAR&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_eliminar</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_eliminar_clicked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">et_dni_e</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni_e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">et_dni_e</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_eliminar</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_eliminar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni_e</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;destroy&#39;</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">main_quit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">()</span>
+
+<div class="viewcode-block" id="FormularioCliente.on_button_toggled"><a class="viewcode-back" href="../../FormularioCliente.html#formularios.formularioCliente.FormularioCliente.on_button_toggled">[documentos]</a>    <span class="k">def</span> <span class="nf">on_button_toggled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que recolle a señal do RadioButton</span>
+<span class="sd">        :param button: boton</span>
+<span class="sd">        :param label: Etiqueta que recolle a opcion do RadioButton</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">button</span><span class="o">.</span><span class="n">get_active</span><span class="p">():</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;on&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;off&quot;</span></div>
+
+<div class="viewcode-block" id="FormularioCliente.on_insertar_clicked"><a class="viewcode-back" href="../../FormularioCliente.html#formularios.formularioCliente.FormularioCliente.on_insertar_clicked">[documentos]</a>    <span class="k">def</span> <span class="nf">on_insertar_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que recolle os datos das entradas e inserta un cliente na base de datos</span>
+<span class="sd">        :param button: boton</span>
+<span class="sd">        :return: Nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dni</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">nome</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_nome</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">apelidos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_apelidos</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">direccion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_direccion</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">telefono</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_telefono</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo</span><span class="o">.</span><span class="n">get_active</span><span class="p">():</span>
+            <span class="n">sexo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sexo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">metodosBD</span><span class="o">.</span><span class="n">BaseDatos</span><span class="o">.</span><span class="n">insertar_cliente</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dni</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">apelidos</span><span class="p">,</span> <span class="n">direccion</span><span class="p">,</span> <span class="n">telefono</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">sexo</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="n">mensaxe</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ButtonsType</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="s2">&quot;Cliente insertado&quot;</span><span class="p">)</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">mensaxe</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ButtonsType</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                        <span class="s2">&quot;Faltan datos ou algún é erróneo&quot;</span><span class="p">)</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="FormularioCliente.on_modificar_clicked"><a class="viewcode-back" href="../../FormularioCliente.html#formularios.formularioCliente.FormularioCliente.on_modificar_clicked">[documentos]</a>    <span class="k">def</span> <span class="nf">on_modificar_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que recolle as entradas de datos e modifica un cliente na base de datos</span>
+<span class="sd">        :param button: boton</span>
+<span class="sd">        :return: Nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dni</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni_m</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">nome</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_nome_m</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">apelidos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_apelidos_m</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">direccion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_direccion_m</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">telefono</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_telefono_m</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_cp_m</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo_m</span><span class="o">.</span><span class="n">get_active</span><span class="p">():</span>
+            <span class="n">sexo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo_m</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sexo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_sexo2_m</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">metodosBD</span><span class="o">.</span><span class="n">BaseDatos</span><span class="o">.</span><span class="n">modificar_cliente</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">apelidos</span><span class="p">,</span> <span class="n">direccion</span><span class="p">,</span> <span class="n">telefono</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">sexo</span><span class="p">,</span> <span class="n">dni</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="n">mensaxe</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ButtonsType</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="s2">&quot;Cliente modificado&quot;</span><span class="p">)</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">mensaxe</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ButtonsType</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                        <span class="s2">&quot;Faltan datos ou algún é erróneo&quot;</span><span class="p">)</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FormularioCliente.on_eliminar_clicked"><a class="viewcode-back" href="../../FormularioCliente.html#formularios.formularioCliente.FormularioCliente.on_eliminar_clicked">[documentos]</a>    <span class="k">def</span> <span class="nf">on_eliminar_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que recolle un dni e elimina un cliente na base de datos</span>
+<span class="sd">        :param button: boton</span>
+<span class="sd">        :return: Nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dni</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entrada_dni_e</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">metodosBD</span><span class="o">.</span><span class="n">BaseDatos</span><span class="o">.</span><span class="n">eliminar_cliente</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dni</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="n">mensaxe</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ButtonsType</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="s2">&quot;Cliente eliminado&quot;</span><span class="p">)</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">mensaxe</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">MessageType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ButtonsType</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                        <span class="s2">&quot;Faltan datos ou algún é erróneo&quot;</span><span class="p">)</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">mensaxe</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FormularioCliente.on_volver_clicked"><a class="viewcode-back" href="../../FormularioCliente.html#formularios.formularioCliente.FormularioCliente.on_volver_clicked">[documentos]</a>    <span class="k">def</span> <span class="nf">on_volver_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para cerrar a ventá actual e volver a pantalla Menu</span>
+<span class="sd">        :param button: boton</span>
+<span class="sd">        :return: Nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">menus</span><span class="o">.</span><span class="n">Menu</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Proxecto DI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegación</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código de módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Búsqueda rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Héctor Pose Caramés.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

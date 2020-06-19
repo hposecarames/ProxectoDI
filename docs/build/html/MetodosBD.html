@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&lt;no title&gt; &#8212; documentación de Proxecto DI - 1.0</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="FormularioCliente.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="Menu.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="module-baseDatos.metodosBD"></span><dl class="py class">
+<dt id="baseDatos.metodosBD.BaseDatos">
+<em class="property">class </em><code class="sig-prename descclassname">baseDatos.metodosBD.</code><code class="sig-name descname">BaseDatos</code><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.conectar">
+<em class="property">static </em><code class="sig-name descname">conectar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.conectar"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.conectar" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método que crea unha conexion a base de datos</p>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve</dt>
+<dd class="field-odd"><p>Obxeto conexion</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.crear_taboas">
+<em class="property">static </em><code class="sig-name descname">crear_taboas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.crear_taboas"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.crear_taboas" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método que crea as táboas da base de datos</p>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve</dt>
+<dd class="field-odd"><p>Non devolve ningún parámetro</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.eliminar_cliente">
+<code class="sig-name descname">eliminar_cliente</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dni</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.eliminar_cliente"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.eliminar_cliente" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para eliminar un cliente
+:param dni: Dni do cliente
+:return: True se elimina o cliente ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.eliminar_pedido">
+<code class="sig-name descname">eliminar_pedido</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.eliminar_pedido"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.eliminar_pedido" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para eliminar un pedido
+:param id: ID do pedido
+:return: True se elimina o pedido ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.eliminar_producto">
+<code class="sig-name descname">eliminar_producto</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">codigo</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.eliminar_producto"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.eliminar_producto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para eliminar un producto
+:param codigo: Código do producto
+:return: True se elimina o producto ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.insertar_cliente">
+<code class="sig-name descname">insertar_cliente</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dni</span></em>, <em class="sig-param"><span class="n">nome</span></em>, <em class="sig-param"><span class="n">apelidos</span></em>, <em class="sig-param"><span class="n">direccion</span></em>, <em class="sig-param"><span class="n">telefono</span></em>, <em class="sig-param"><span class="n">cp</span></em>, <em class="sig-param"><span class="n">sexo</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.insertar_cliente"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.insertar_cliente" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para insertar un cliente na base de datos
+:param dni: Dni do cliente
+:param nome: Nome do cliente
+:param apelidos: Apelidos do cliente
+:param direccion: Dirección do cliente
+:param telefono: Teléfono do cliente
+:param cp: Código postal do cliente
+:param sexo: Sexo do cliente
+:return: True se inserta o cliente ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.insertar_pedido">
+<code class="sig-name descname">insertar_pedido</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dni</span></em>, <em class="sig-param"><span class="n">codigo</span></em>, <em class="sig-param"><span class="n">cantidade</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.insertar_pedido"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.insertar_pedido" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para insertar un pedido na base de datos
+:param dni: Dni do cliente
+:param codigo: Código do producto
+:param cantidade: Cantidade do producto
+:return: True se inserta o pedido ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.insertar_producto">
+<code class="sig-name descname">insertar_producto</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">codigo</span></em>, <em class="sig-param"><span class="n">nome</span></em>, <em class="sig-param"><span class="n">prezo</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.insertar_producto"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.insertar_producto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para insertar un producto na base de datos
+:param codigo: Código do producto
+:param nome: Nome do producto
+:param prezo: Prezo do producto
+:return: True se inserta o cliente ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.insertar_usuario">
+<code class="sig-name descname">insertar_usuario</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ususario</span></em>, <em class="sig-param"><span class="n">contrasinal</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.insertar_usuario"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.insertar_usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método que inserta un usuario</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ususario</strong> – Usuario</p></li>
+<li><p><strong>contrasinal</strong> – Contrasinal do usuario</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve</dt>
+<dd class="field-even"><p>True se inserta o usuario ou False se faltan datos ou hai datos errados</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.modificar_cliente">
+<code class="sig-name descname">modificar_cliente</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nome</span></em>, <em class="sig-param"><span class="n">apelidos</span></em>, <em class="sig-param"><span class="n">direccion</span></em>, <em class="sig-param"><span class="n">telefono</span></em>, <em class="sig-param"><span class="n">cp</span></em>, <em class="sig-param"><span class="n">sexo</span></em>, <em class="sig-param"><span class="n">dni</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.modificar_cliente"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.modificar_cliente" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para modificar un cliente
+:param nome: Nome do cliente
+:param apelidos: Apelidos do cliente
+:param direccion: Dirección do cliente
+:param telefono: Teléfono do cliente
+:param cp: Código Postal do cliente
+:param sexo: Sexo do cliente
+:param dni: Dni do cliente
+:return: True se modifica o cliente ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.modificar_pedido">
+<code class="sig-name descname">modificar_pedido</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">dni</span></em>, <em class="sig-param"><span class="n">codigo</span></em>, <em class="sig-param"><span class="n">cantidade</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.modificar_pedido"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.modificar_pedido" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para modificar un pedido
+:param id: ID do pedido
+:param dni: Dni do cliente
+:param codigo: Código do producto
+:param cantidade: Cantidade do producto
+:return: True se modica o pedido ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.modificar_producto">
+<code class="sig-name descname">modificar_producto</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">codigo</span></em>, <em class="sig-param"><span class="n">nome</span></em>, <em class="sig-param"><span class="n">prezo</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.modificar_producto"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.modificar_producto" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para modificar un producto
+:param codigo: Código do producto
+:param nome: Nome do producto
+:param prezo: Prezo do producto
+:return: True se modica o producto ou False se faltan datos ou hai datos errados</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.obter_datos">
+<code class="sig-name descname">obter_datos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.obter_datos"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.obter_datos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para listar tódolos datos dos clientes
+:return: Lista de tódolos  datos dos clientes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.obter_pedidos">
+<code class="sig-name descname">obter_pedidos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dni</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.obter_pedidos"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.obter_pedidos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para listar tódolos pedidos de un cliente
+:param dni: Dni do cliente
+:return: Lista de tódolos pedidos feitos por ese cliente</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="baseDatos.metodosBD.BaseDatos.obter_usuario">
+<code class="sig-name descname">obter_usuario</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usuario</span></em>, <em class="sig-param"><span class="n">contrasinal</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/baseDatos/metodosBD.html#BaseDatos.obter_usuario"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#baseDatos.metodosBD.BaseDatos.obter_usuario" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Método para contar se hai algún usuario con ese nome e contrasinal
+:param usuario: Identificador do usuario
+:param contrasinal: Contrasinal do usuario
+:return: 1 se econtra algún usuario e contrasinal que coincida ou 0 se non encontra nada</p>
+</dd></dl>
+
+</dd></dl>
+
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Proxecto DI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegación</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Menu.html" title="capítulo anterior">&lt;no title&gt;</a></li>
+      <li>Next: <a href="FormularioCliente.html" title="próximo capítulo">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Búsqueda rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Héctor Pose Caramés.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/MetodosBD.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

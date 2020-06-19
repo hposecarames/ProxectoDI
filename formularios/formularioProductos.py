@@ -93,32 +93,59 @@ class FormularioProducto(Gtk.Window):
 
 
     def on_insertar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
+
         codigo = self.entrada_codigo.get_text()
         nome = self.entrada_nome.get_text()
         prezo = self.entrada_prezo.get_text()
 
 
-        metodosBD.BaseDatos.insertar_producto(con, codigo, nome, prezo)
+        if metodosBD.BaseDatos.insertar_producto(self, codigo, nome, prezo) == True:
 
-        mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Producto insertado")
-        mensaxe.run()
-        mensaxe.destroy()
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Producto insertado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
+
+
 
     def on_modificar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
+
         codigo = self.entrada_codigo_m.get_text()
         nome = self.entrada_nome_m.get_text()
         prezo = self.entrada_prezo_m.get_text()
 
+        if metodosBD.BaseDatos.modificar_producto(self, codigo, nome, prezo) == True:
 
-        metodosBD.BaseDatos.modificar_producto(con, codigo, nome, prezo)
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Producto modificado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
 
     def on_eliminar_clicked(self, button):
-        con = metodosBD.BaseDatos.conectar()
+
         codigo = self.entrada_codigo_e.get_text()
 
-        metodosBD.BaseDatos.eliminar_producto(con, codigo)
+        if metodosBD.BaseDatos.eliminar_producto(self, codigo) == True:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Producto eliminado")
+            mensaxe.run()
+            mensaxe.destroy()
+        else:
+
+            mensaxe = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+                                        "Faltan datos ou algún é erróneo")
+            mensaxe.run()
+            mensaxe.destroy()
 
     def on_volver_clicked(self, button):
         menus.Menu()

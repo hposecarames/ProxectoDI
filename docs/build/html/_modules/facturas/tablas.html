@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>facturas.tablas &#8212; documentación de Proxecto DI - 1.0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fuente para facturas.tablas</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">gi</span>
+<span class="n">gi</span><span class="o">.</span><span class="n">require_version</span><span class="p">(</span><span class="s1">&#39;Gtk&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Gtk</span>
+<span class="kn">from</span> <span class="nn">baseDatos.metodosBD</span> <span class="kn">import</span> <span class="n">BaseDatos</span>
+<span class="kn">from</span> <span class="nn">menu</span> <span class="kn">import</span> <span class="n">menus</span>
+<span class="kn">from</span> <span class="nn">reportlab.pdfgen</span> <span class="kn">import</span> <span class="n">canvas</span>
+<span class="kn">from</span> <span class="nn">reportlab.lib.pagesizes</span> <span class="kn">import</span> <span class="n">A4</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="Facturas"><a class="viewcode-back" href="../../Tablas.html#facturas.tablas.Facturas">[documentos]</a><span class="k">class</span> <span class="nc">Facturas</span><span class="p">(</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método constructor, aquí definimos tódolos elementos que constituen a ventá de FormularioPedido</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Gtk</span><span class="o">.</span><span class="n">Window</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Facturas&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_size</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_border_width</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Box</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa</span><span class="o">.</span><span class="n">set_orientation</span><span class="p">(</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">caixa</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">columna_cliente</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dni&#39;</span><span class="p">,</span> <span class="s1">&#39;Nome&#39;</span><span class="p">,</span> <span class="s1">&#39;Apelidos&#39;</span><span class="p">,</span> <span class="s1">&#39;Direccion&#39;</span><span class="p">,</span> <span class="s1">&#39;Telefono&#39;</span><span class="p">,</span> <span class="s1">&#39;Codigo Postal&#39;</span><span class="p">,</span> <span class="s1">&#39;Sexo&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ListStore</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lista</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treeView</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">TreeView</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">treeView</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_imprimir</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Imprimir&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_volver</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;VOLVER&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_imprimir</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;clicked&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_imprimir_clicked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_volver</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_volver_clicked</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">opcions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Ficha Cliente&quot;</span><span class="p">,</span> <span class="s2">&quot;Pedidos Cliente&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combo</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">ComboBoxText</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">append_text</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Grid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">set_border_width</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">set_column_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">set_row_spacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_imprimir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">attach_next_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_volver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">btn_imprimir</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caixa</span><span class="o">.</span><span class="n">pack_end</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">con</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+        <span class="n">datos</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">obter_datos</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;destroy&quot;</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">main_quit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">dato</span> <span class="ow">in</span> <span class="n">datos</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lista</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dato</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dato</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dato</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dato</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">dato</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">dato</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">dato</span><span class="p">[</span><span class="mi">6</span><span class="p">]])</span>
+
+        <span class="k">for</span> <span class="n">nome</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lista</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nome</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columna_cliente</span><span class="p">)):</span>
+            <span class="n">celda</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">CellRendererText</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">columna</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">TreeViewColumn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columna_cliente</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">celda</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treeView</span><span class="o">.</span><span class="n">append_column</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columna</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">columna</span><span class="o">.</span><span class="n">set_sort_column_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fila_seleccionada</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treeView</span><span class="o">.</span><span class="n">get_selection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fila_seleccionada</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;changed&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seleccion</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Facturas.seleccion"><a class="viewcode-back" href="../../Tablas.html#facturas.tablas.Facturas.seleccion">[documentos]</a>    <span class="k">def</span> <span class="nf">seleccion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que recolle a fila seleccionada do Treeview</span>
+<span class="sd">        :param selection: fila seleccionada</span>
+<span class="sd">        :return: Nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fila</span> <span class="o">=</span> <span class="n">selection</span><span class="o">.</span><span class="n">get_selected</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Facturas.on_imprimir_clicked"><a class="viewcode-back" href="../../Tablas.html#facturas.tablas.Facturas.on_imprimir_clicked">[documentos]</a>    <span class="k">def</span> <span class="nf">on_imprimir_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que crea un pdf ca ficha ou os pedidos do cliente que recollemos ca fila seleccionada</span>
+<span class="sd">        :param button: boton</span>
+<span class="sd">        :return: Nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">get_active_text</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;Ficha Cliente&quot;</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span>
+            <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">A4</span>
+            <span class="n">pdf</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">Canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pagesize</span><span class="o">=</span><span class="n">A4</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+            <span class="n">lp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;logo.jpg&#39;</span><span class="p">)</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">drawImage</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+            <span class="n">texto</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">beginText</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">h</span><span class="o">-</span><span class="mi">300</span><span class="p">)</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Dni: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Nome: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Apelidos: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Direccion: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Telefono: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">4</span><span class="p">])</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Codigo Postal: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">5</span><span class="p">])</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Sexo: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">6</span><span class="p">])</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">texto</span><span class="p">)</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">showPage</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">get_active_text</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;Pedidos Cliente&quot;</span><span class="p">:</span>
+            <span class="n">dni</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+
+            <span class="n">pedidos</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">obter_pedidos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dni</span><span class="p">)</span>
+            <span class="n">listas</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">pedido</span> <span class="ow">in</span> <span class="n">pedidos</span><span class="p">:</span>
+                <span class="n">listas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pedido</span><span class="p">)</span>
+
+
+
+
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fila</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s2">&quot;-pedido&quot;</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span>
+            <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">A4</span>
+            <span class="n">pdf</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">Canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pagesize</span><span class="o">=</span><span class="n">A4</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+            <span class="n">lp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;logo.jpg&#39;</span><span class="p">)</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">drawImage</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+            <span class="n">texto</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">beginText</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">h</span><span class="o">-</span><span class="mi">300</span><span class="p">)</span>
+            <span class="n">texto</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">lista</span> <span class="ow">in</span> <span class="n">listas</span><span class="p">:</span>
+                <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;ID: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lista</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Dni: &quot;</span> <span class="o">+</span> <span class="n">lista</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Codigo: &quot;</span> <span class="o">+</span> <span class="n">lista</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;Cantidade: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lista</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+                <span class="n">texto</span><span class="o">.</span><span class="n">textLine</span><span class="p">(</span><span class="s2">&quot;---------------------------------------------------------------&quot;</span><span class="p">)</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">texto</span><span class="p">)</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">showPage</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="Facturas.on_volver_clicked"><a class="viewcode-back" href="../../Tablas.html#facturas.tablas.Facturas.on_volver_clicked">[documentos]</a>    <span class="k">def</span> <span class="nf">on_volver_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para cerrar a ventá actual e volver a pantalla Menu</span>
+<span class="sd">        :param button: boton</span>
+<span class="sd">        :return: Nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">menus</span><span class="o">.</span><span class="n">Menu</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div></div>
+
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Proxecto DI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegación</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código de módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Búsqueda rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Héctor Pose Caramés.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>baseDatos.metodosBD &#8212; documentación de Proxecto DI - 1.0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fuente para baseDatos.metodosBD</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="BaseDatos"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos">[documentos]</a><span class="k">class</span> <span class="nc">BaseDatos</span><span class="p">:</span>
+
+<div class="viewcode-block" id="BaseDatos.conectar"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.conectar">[documentos]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">conectar</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que crea unha conexion a base de datos</span>
+
+<span class="sd">        :return: Obxeto conexion</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+            <span class="n">bd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;database.db&#39;</span><span class="p">)</span>
+            <span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">bd</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_conexion</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">erro_conexion</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">con</span></div>
+
+<div class="viewcode-block" id="BaseDatos.crear_taboas"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.crear_taboas">[documentos]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">crear_taboas</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que crea as táboas da base de datos</span>
+
+<span class="sd">        :return: Non devolve ningún parámetro</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">((</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS usuarios(</span>
+<span class="s2">                                usuario TEXT PRIMARY KEY,</span>
+<span class="s2">                                contrasinal TEXT NOT NULL)&quot;&quot;&quot;</span><span class="p">))</span>
+
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS clientes(</span>
+<span class="s2">                            dni TEXT PRIMARY KEY,</span>
+<span class="s2">                            nome TEXT NOT NULL,</span>
+<span class="s2">                            apelidos TEXT NOT NULL,</span>
+<span class="s2">                            direccion TEXT NOT NULL,</span>
+<span class="s2">                            telefono TEXT NOT NULL,</span>
+<span class="s2">                            cp TEXT NOT NULL,</span>
+<span class="s2">                            sexo TEXT NOT NULL)&quot;&quot;&quot;</span><span class="p">)</span>
+
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS productos(</span>
+<span class="s2">                                        codigo TEXT PRIMARY KEY,</span>
+<span class="s2">                                        nome TEXT NOT NULL,</span>
+<span class="s2">                                        prezo INTEGER NOT NULL)&quot;&quot;&quot;</span><span class="p">)</span>
+
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS pedidos(</span>
+<span class="s2">                                        id INTEGER PRIMARY KEY,                            </span>
+<span class="s2">                                        dni TEXT NOT NULL,</span>
+<span class="s2">                                        codigo TEXT NOT NULL,</span>
+<span class="s2">                                        cantidade INTEGER NOT NULL,</span>
+<span class="s2">                                        FOREIGN KEY (dni) REFERENCES clientes(dni),</span>
+<span class="s2">                                        FOREIGN KEY (codigo) REFERENCES productos(codigo))&quot;&quot;&quot;</span><span class="p">)</span>
+
+
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_crear_taboa</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o crear a táboa &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_crear_taboa</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BaseDatos.insertar_usuario"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.insertar_usuario">[documentos]</a>    <span class="k">def</span> <span class="nf">insertar_usuario</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ususario</span><span class="p">,</span> <span class="n">contrasinal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que inserta un usuario</span>
+
+<span class="sd">        :param ususario: Usuario</span>
+<span class="sd">        :param contrasinal: Contrasinal do usuario</span>
+<span class="sd">        :return: True se inserta o usuario ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;INSERT INTO usuarios(usuario, contrasinal)</span>
+<span class="s2">                                VALUES (?,?)&quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ususario</span><span class="p">,</span> <span class="n">contrasinal</span><span class="p">))</span>
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_login</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro no login&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_login</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.insertar_cliente"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.insertar_cliente">[documentos]</a>    <span class="k">def</span> <span class="nf">insertar_cliente</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dni</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">apelidos</span><span class="p">,</span> <span class="n">direccion</span><span class="p">,</span> <span class="n">telefono</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">sexo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para insertar un cliente na base de datos</span>
+<span class="sd">        :param dni: Dni do cliente</span>
+<span class="sd">        :param nome: Nome do cliente</span>
+<span class="sd">        :param apelidos: Apelidos do cliente</span>
+<span class="sd">        :param direccion: Dirección do cliente</span>
+<span class="sd">        :param telefono: Teléfono do cliente</span>
+<span class="sd">        :param cp: Código postal do cliente</span>
+<span class="sd">        :param sexo: Sexo do cliente</span>
+<span class="sd">        :return: True se inserta o cliente ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dni</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">nome</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">apelidos</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">direccion</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">telefono</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">cp</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">sexo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;INSERT INTO clientes(dni, nome, apelidos, direccion, telefono, cp, sexo)</span>
+<span class="s2">                                    VALUES (?,?,?,?,?,?,?)&quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">dni</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">apelidos</span><span class="p">,</span> <span class="n">direccion</span><span class="p">,</span> <span class="n">telefono</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">sexo</span><span class="p">))</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_cliente</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o insertar o cliente &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_cliente</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.insertar_producto"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.insertar_producto">[documentos]</a>    <span class="k">def</span> <span class="nf">insertar_producto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">codigo</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">prezo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para insertar un producto na base de datos</span>
+<span class="sd">        :param codigo: Código do producto</span>
+<span class="sd">        :param nome: Nome do producto</span>
+<span class="sd">        :param prezo: Prezo do producto</span>
+<span class="sd">        :return: True se inserta o cliente ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">codigo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">nome</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">prezo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;INSERT INTO productos(codigo, nome, prezo)</span>
+<span class="s2">                                    VALUES (?,?,?)&quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">codigo</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">prezo</span><span class="p">))</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_producto</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o insertar o producto &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_producto</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.insertar_pedido"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.insertar_pedido">[documentos]</a>    <span class="k">def</span> <span class="nf">insertar_pedido</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dni</span><span class="p">,</span> <span class="n">codigo</span><span class="p">,</span> <span class="n">cantidade</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para insertar un pedido na base de datos</span>
+<span class="sd">        :param dni: Dni do cliente</span>
+<span class="sd">        :param codigo: Código do producto</span>
+<span class="sd">        :param cantidade: Cantidade do producto</span>
+<span class="sd">        :return: True se inserta o pedido ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">dni</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">codigo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">cantidade</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;INSERT INTO pedidos(dni, codigo, cantidade)</span>
+<span class="s2">                                    VALUES (?,?,?)&quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">dni</span><span class="p">,</span> <span class="n">codigo</span><span class="p">,</span> <span class="n">cantidade</span><span class="p">))</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_pedido</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o insertar o pedido &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_pedido</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.modificar_cliente"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.modificar_cliente">[documentos]</a>    <span class="k">def</span> <span class="nf">modificar_cliente</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">apelidos</span><span class="p">,</span> <span class="n">direccion</span><span class="p">,</span> <span class="n">telefono</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">sexo</span><span class="p">,</span> <span class="n">dni</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para modificar un cliente</span>
+<span class="sd">        :param nome: Nome do cliente</span>
+<span class="sd">        :param apelidos: Apelidos do cliente</span>
+<span class="sd">        :param direccion: Dirección do cliente</span>
+<span class="sd">        :param telefono: Teléfono do cliente</span>
+<span class="sd">        :param cp: Código Postal do cliente</span>
+<span class="sd">        :param sexo: Sexo do cliente</span>
+<span class="sd">        :param dni: Dni do cliente</span>
+<span class="sd">        :return: True se modifica o cliente ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">nome</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">apelidos</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">direccion</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">telefono</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">cp</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">sexo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">dni</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;UPDATE clientes SET nome=?, apelidos=?, direccion=?, telefono=?, cp=?, sexo=? </span>
+<span class="s2">                                    WHERE dni=?&quot;&quot;&quot;</span><span class="p">,(</span><span class="n">nome</span><span class="p">,</span> <span class="n">apelidos</span><span class="p">,</span> <span class="n">direccion</span><span class="p">,</span> <span class="n">telefono</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">sexo</span><span class="p">,</span> <span class="n">dni</span><span class="p">))</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_modificar</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o modificar o cliente &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_modificar</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.modificar_producto"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.modificar_producto">[documentos]</a>    <span class="k">def</span> <span class="nf">modificar_producto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">codigo</span><span class="p">,</span> <span class="n">nome</span><span class="p">,</span> <span class="n">prezo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para modificar un producto</span>
+<span class="sd">        :param codigo: Código do producto</span>
+<span class="sd">        :param nome: Nome do producto</span>
+<span class="sd">        :param prezo: Prezo do producto</span>
+<span class="sd">        :return: True se modica o producto ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">codigo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">nome</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">prezo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;UPDATE productos SET nome=?, prezo=? WHERE codigo=?&quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">prezo</span><span class="p">,</span> <span class="n">codigo</span><span class="p">))</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_modificar</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o modicar o producto &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_modificar</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.modificar_pedido"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.modificar_pedido">[documentos]</a>    <span class="k">def</span> <span class="nf">modificar_pedido</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">dni</span><span class="p">,</span> <span class="n">codigo</span><span class="p">,</span> <span class="n">cantidade</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para modificar un pedido</span>
+<span class="sd">        :param id: ID do pedido</span>
+<span class="sd">        :param dni: Dni do cliente</span>
+<span class="sd">        :param codigo: Código do producto</span>
+<span class="sd">        :param cantidade: Cantidade do producto</span>
+<span class="sd">        :return: True se modica o pedido ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">dni</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">codigo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">cantidade</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;UPDATE productos SET dni=?, codigo=?, cantidade=? WHERE id=?&quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">dni</span><span class="p">,</span> <span class="n">codigo</span><span class="p">,</span> <span class="n">cantidade</span><span class="p">,</span> <span class="nb">id</span><span class="p">))</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_modificar</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o modicar o pedido &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_modificar</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="BaseDatos.eliminar_cliente"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.eliminar_cliente">[documentos]</a>    <span class="k">def</span> <span class="nf">eliminar_cliente</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dni</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para eliminar un cliente</span>
+<span class="sd">        :param dni: Dni do cliente</span>
+<span class="sd">        :return: True se elimina o cliente ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">dni</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM clientes WHERE dni = &#39;&quot;</span><span class="o">+</span> <span class="n">dni</span> <span class="o">+</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_eliminar</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o eliminar o cliente &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_eliminar</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.eliminar_producto"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.eliminar_producto">[documentos]</a>    <span class="k">def</span> <span class="nf">eliminar_producto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">codigo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para eliminar un producto</span>
+<span class="sd">        :param codigo: Código do producto</span>
+<span class="sd">        :return: True se elimina o producto ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">codigo</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM productos WHERE codigo = &#39;&quot;</span><span class="o">+</span> <span class="n">codigo</span> <span class="o">+</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_eliminar</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o eliminar o producto &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_eliminar</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseDatos.eliminar_pedido"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.eliminar_pedido">[documentos]</a>    <span class="k">def</span> <span class="nf">eliminar_pedido</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para eliminar un pedido</span>
+<span class="sd">        :param id: ID do pedido</span>
+<span class="sd">        :return: True se elimina o pedido ou False se faltan datos ou hai datos errados</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM pedidos WHERE id = &#39;&quot;</span><span class="o">+</span> <span class="nb">id</span> <span class="o">+</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_eliminar</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o eliminar o pedido &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_eliminar</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="BaseDatos.obter_datos"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.obter_datos">[documentos]</a>    <span class="k">def</span> <span class="nf">obter_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para listar tódolos datos dos clientes</span>
+<span class="sd">        :return: Lista de tódolos  datos dos clientes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">consulta</span> <span class="o">=</span> <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM clientes&quot;</span><span class="p">)</span>
+            <span class="n">datos</span> <span class="o">=</span> <span class="n">consulta</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">datos</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_datos</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o obter os datos &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_datos</span><span class="p">))</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaseDatos.obter_pedidos"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.obter_pedidos">[documentos]</a>    <span class="k">def</span> <span class="nf">obter_pedidos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dni</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para listar tódolos pedidos de un cliente</span>
+<span class="sd">        :param dni: Dni do cliente</span>
+<span class="sd">        :return: Lista de tódolos pedidos feitos por ese cliente</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">consulta</span> <span class="o">=</span> <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM pedidos WHERE dni = &#39;&quot;</span><span class="o">+</span> <span class="n">dni</span> <span class="o">+</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+            <span class="n">datos</span> <span class="o">=</span> <span class="n">consulta</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">datos</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_pedido</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erro o obter o pedido &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_pedido</span><span class="p">))</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">cursor_obx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaseDatos.obter_usuario"><a class="viewcode-back" href="../../MetodosBD.html#baseDatos.metodosBD.BaseDatos.obter_usuario">[documentos]</a>    <span class="k">def</span> <span class="nf">obter_usuario</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usuario</span><span class="p">,</span> <span class="n">contrasinal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para contar se hai algún usuario con ese nome e contrasinal</span>
+<span class="sd">        :param usuario: Identificador do usuario</span>
+<span class="sd">        :param contrasinal: Contrasinal do usuario</span>
+<span class="sd">        :return: 1 se econtra algún usuario e contrasinal que coincida ou 0 se non encontra nada</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor_obx</span> <span class="o">=</span> <span class="n">BaseDatos</span><span class="o">.</span><span class="n">conectar</span><span class="p">()</span>
+            <span class="n">consulta</span> <span class="o">=</span> <span class="n">cursor_obx</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT count(*) FROM usuarios WHERE usuario = ? and contrasinal = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">usuario</span><span class="p">,</span> <span class="n">contrasinal</span><span class="p">))</span>
+            <span class="n">datos</span> <span class="o">=</span> <span class="n">consulta</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">datos</span>
+
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">erro_usuario</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Usuario ou contrasinal erróneos&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">erro_usuario</span><span class="p">))</span></div></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Proxecto DI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegación</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Código de módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Búsqueda rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Héctor Pose Caramés.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
